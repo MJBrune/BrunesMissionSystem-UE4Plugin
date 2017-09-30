@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "BrunesMissionSystem",
+	"Description": "A Mission Manager system specifically made to support large multi-level unique missions",
+	"Category": "Other",
+	"CreatedBy": "Underflow Studios",
+	"CreatedByURL": "http://www.underflowstudios.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BrunesMissionSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	]
+}
