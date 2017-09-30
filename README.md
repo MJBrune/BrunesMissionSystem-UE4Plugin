@@ -28,12 +28,14 @@ private:
 };
 ```
 
-``` void AJPPlayerController::OnConstruction(const FTransform& Transform)
+``` 
+void AJPPlayerController::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
 	MissionSystemManager = GetWorld()->SpawnActor<ABruMissionManager>(ABruMissionManager::StaticClass(), GetActorTransform());
-} ```
+} 
+```
 
 ### Commit Guide
 
