@@ -21,7 +21,7 @@ class BRUNESMISSIONSYSTEM_API IBrunesMissionSystemInterface
 {
 	GENERATED_BODY()
 public:
-	//returns the mission system so we can find on the player controller.
+	//returns the mission system so we can find the mission manager on an actor (Currently only supported to be the first player controller).
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Brune's Mission System")
 	ABruMissionManager* GetMissionManager();
 	
