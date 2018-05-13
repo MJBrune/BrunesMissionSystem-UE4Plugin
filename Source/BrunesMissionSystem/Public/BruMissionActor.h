@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Mission System")
 	void OnRegisterMissionActor();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Mission System")
+	void OnUnregisterMissionActor();
+
 	//True if the mission manager has found an active mission for this actor.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mission System")
 	bool bIsRegisteredWithMission = false;

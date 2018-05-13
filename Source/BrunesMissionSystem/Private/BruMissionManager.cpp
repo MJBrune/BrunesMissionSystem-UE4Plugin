@@ -33,6 +33,7 @@ UBruMissionMetaData* ABruMissionManager::CreateMission(TSubclassOf<UBruMissionMe
 	UBruMissionMetaData* NewMission = NewObject<UBruMissionMetaData>(GetTransientPackage(), MissionDataClass);
 	ActiveMissions.AddUnique(NewMission);
 	NewMission->SetMissionManager(this);
+	NewMission->OnMissionActivated();
 	return NewMission;
 }
 
@@ -92,6 +93,15 @@ void ABruMissionManager::RegisterMissionActor(ABruMissionActor* MissionActor)
 	PendingeMissionActors.AddUnique(MissionActor);
 }
 
+void ABruMissionManager::UnregisterMissionActor(ABruMissionActor* MissionActor)
+{
+	MissionActor->ParentMission = nullptr;
+	MissionActor->ParentMissionTask = nullptr;
+	MissionActor->OnUnregisterMissionActor();
+	MissionActor->bIsRegisteredWithMission = false;
+	RegisterMissionActor(MissionActor);//Add the mission actor back to the pool as normal.
+}
+
 bool ABruMissionManager::HasCompletedMissionTask(TSubclassOf<UBruMissionMetaData> MissionDataClass, TSubclassOf<UBruMissionTask> TaskDataClass)
 {
 	if (!IsValid(MissionDataClass) || !IsValid(TaskDataClass))
@@ -114,6 +124,22 @@ bool ABruMissionManager::HasCompletedMissionTask(TSubclassOf<UBruMissionMetaData
 	}
 
 	return false;
+}
+
+void ABruMissionManager::SetMissionAsCompleted(UBruMissionMetaData* MissionCompleted)
+{
+	for (UBruMissionMetaData* ActiveMissionData : ActiveMissions)
+	{
+		if (ActiveMissionData == MissionCompleted)
+		{
+			CompletedMissions.Add(ActiveMissionData);
+		}
+	}
+
+	ActiveMissions.RemoveAll([&](const UBruMissionMetaData* Ptr)
+	{
+		return Ptr == MissionCompleted;
+	});
 }
 
 void ABruMissionManager::Tick(float DeltaSeconds)
@@ -139,6 +165,7 @@ void ABruMissionManager::Tick(float DeltaSeconds)
 						MissionActor->ParentMission = MissionData;
 						MissionActor->ParentMissionTask = MissionTaskData;
 						MissionActor->OnRegisterMissionActor();
+						MissionActor->bIsRegisteredWithMission = true;
 					}
 				}
 			}

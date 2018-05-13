@@ -17,9 +17,13 @@ ABruMissionActor::ABruMissionActor(const class FObjectInitializer& ObjectInitial
 	TaskWaypointWidget->SetWidgetSpace(EWidgetSpace::Screen);
 }
 
+void ABruMissionActor::OnUnregisterMissionActor_Implementation()
+{
+	TaskWaypointWidget->SetVisibility(false);
+}
+
 void ABruMissionActor::OnRegisterMissionActor_Implementation()
 {
-	bIsRegisteredWithMission = true;
 	TaskWaypointWidget->SetVisibility(true);
 }
 

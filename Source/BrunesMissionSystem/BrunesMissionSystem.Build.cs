@@ -30,6 +30,8 @@ public class BrunesMissionSystem : ModuleRules
 			new string[]
 			{
 				"Core",
+                "CoreUObject",
+                "Engine",
 				
 				// ... add other public dependencies that you statically link with here ...
 			}
@@ -39,8 +41,6 @@ public class BrunesMissionSystem : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
 				"Slate",
 				"SlateCore",
                 "UMG"

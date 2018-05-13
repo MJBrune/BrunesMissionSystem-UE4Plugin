@@ -45,9 +45,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Mission System")
 	virtual void RegisterMissionActor(ABruMissionActor* MissionActor);
 
-	//Called to register a mission actor with the mission manager to tie it to a task.
+	UFUNCTION(BlueprintCallable, Category = "Mission System")
+	virtual void UnregisterMissionActor(ABruMissionActor* MissionActor);
+
+	//Called to check if a mission task has already been completed.
 	UFUNCTION(BlueprintCallable, Category = "Mission System")
 	virtual bool HasCompletedMissionTask(TSubclassOf<UBruMissionMetaData> MissionData, TSubclassOf<UBruMissionTask> TaskData);
+
+	virtual void SetMissionAsCompleted(UBruMissionMetaData* MissionCompleted);
 
 protected:
 	virtual void BeginPlay() override;

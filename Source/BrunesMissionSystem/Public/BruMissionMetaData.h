@@ -2,11 +2,11 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "Templates/SubclassOf.h"
+#include "BruMissionTask.h"
 #include "BruMissionMetaData.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBruMissionCompletedResults, bool, bMissionHasFailed);
-
-class UBruMissionTask;
 class ABruMissionManager;
 
 /**
@@ -29,10 +29,20 @@ public:
 	//Called to complete the mission and close out the UI for the mission.
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Task Status")
 	void CompleteMission(bool bMissionHasFailed);
+	virtual void CompleteMission_Implementation(bool bMissionHasFailed);
 
 	//Sets the mission manager for callbacks
 	UFUNCTION(BlueprintCallable, Category = "Task Status")
 	virtual void SetMissionManager(ABruMissionManager* MissionManager);
+
+	//Called after CompleteMission is called.
+	UFUNCTION(BlueprintNativeEvent, Category = "Mission Status")
+	void OnMissionCompleted(bool bMissionHasFailed);
+	virtual void OnMissionCompleted_Implementation(bool bMissionHasFailed);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Mission Status")
+	void OnMissionActivated();
+	virtual void OnMissionActivated_Implementation();
 
 	//Mission Manager in order to communicate back. NULL until OnMissionManagerSet is called.
 	UPROPERTY(Transient, BlueprintReadOnly, VisibleAnywhere, Category = "Task Status")
@@ -53,10 +63,6 @@ public:
 	//The current tasks for the active player.
 	UPROPERTY(Transient, BlueprintReadOnly, EditAnywhere, Category = "Tasks")
 	TArray<UBruMissionTask*> ActiveTasks;
-
-	//Called after CompleteMission is called.
-	UPROPERTY(BlueprintAssignable)
-	FBruMissionCompletedResults OnMissionCompleted;
 
 	//true if the mission is completed and should be displayed as such.
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Task Status")

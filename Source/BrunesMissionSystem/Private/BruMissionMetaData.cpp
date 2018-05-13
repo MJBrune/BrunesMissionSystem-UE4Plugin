@@ -1,8 +1,11 @@
 // Copyright Underflow Studios 2017
 
 #include "BruMissionMetaData.h"
-#include "BruMissionTask.h"
+#include "Package.h"
+#include "UObject/UObjectGlobals.h"
 #include "BruMissionManager.h"
+
+class UBruMissionTask;
 
 UBruMissionTask* UBruMissionMetaData::ActivateTask(TSubclassOf<UBruMissionTask> MissionTask, bool bShouldBroadcastNotifyEvent)
 {
@@ -50,9 +53,29 @@ void UBruMissionMetaData::SetMissionManager(ABruMissionManager* MissionManager)
 	ParentMissionManager = MissionManager;
 }
 
+void UBruMissionMetaData::OnMissionCompleted_Implementation(bool bMissionHasFailed)
+{
+
+}
+
+void UBruMissionMetaData::OnMissionActivated_Implementation()
+{
+
+}
+
 void UBruMissionMetaData::CompleteMission_Implementation(bool bMissionHasFailed)
 {
+	for (UBruMissionTask* ActiveTask : ActiveTasks)
+	{
+		for (ABruMissionActor* MissionActor : ActiveTask->RegisteredTaskActors)
+		{
+			ParentMissionManager->UnregisterMissionActor(MissionActor);
+		}
+		ActiveTask->RegisteredTaskActors.Empty();
+		ActiveTask->CompleteTask(bMissionHasFailed);
+	}
 	bHasFailed = bMissionHasFailed;
 	bHasCompleted = true;
-	OnMissionCompleted.Broadcast(bMissionHasFailed);
+	ParentMissionManager->SetMissionAsCompleted(this);
+	OnMissionCompleted(bMissionHasFailed);
 }
